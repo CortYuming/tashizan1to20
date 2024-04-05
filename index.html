@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ランダムな足し算問題</title>
+    <style>
+        #problem {
+            font-size: 30px;
+            text-align: center;
+            margin: 50px auto;
+        }
+
+        #answer {
+            display: none;
+            font-size: 50px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        #totalCount {
+            margin-top: 1em;
+            text-align: center;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="center" style="margin-top: 3em;">
+      <button onclick="showProblem()">つぎのもんだい</button>
+    </div>
+    <div id="totalCount"></div>
+    <div class="center" style="margin-top: 1em;">
+      <button onclick="showAnswer()">こたえ</button>
+    </div>
+    <div id="answer"></div>
+
+    <div>
+        <pre id="problem"></pre>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
