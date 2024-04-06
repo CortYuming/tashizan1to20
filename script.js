@@ -55,4 +55,5 @@ function showAnswer() {
 function resetCount() {
   count = 0;
   showTotalCount(count);
+  generateProblem();
 }
