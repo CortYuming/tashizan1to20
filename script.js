@@ -3,6 +3,8 @@ const answer = document.getElementById('answer');
 const totalCount = document.getElementById('totalCount')
 let count = 1
 
+showTotalCount(count);
+
 function generateProblem() {
     const num1 = Math.floor(Math.random() * 20) + 1;
     const num2 = Math.floor(Math.random() * 20) + 1;
@@ -39,6 +41,10 @@ function showProblem() {
   answer.style.display = 'none';
 
   count += 1
+  showTotalCount(count);
+}
+
+function showTotalCount(count) {
   totalCount.innerHTML = count + " もんめ";;
 }
 

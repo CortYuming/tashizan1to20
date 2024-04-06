@@ -1,38 +1,37 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ランダムな足し算問題</title>
-    <style>
-        #problem {
-            font-size: 30px;
-            text-align: center;
-            margin: 50px auto;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ランダムな足し算問題</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.0/css/bulma.min.css" integrity="sha512-+oEiKVGJRHutsibRYkkTIfjI0kspDtgJtkIlyPCNTCFCdhy+nSe25nvrCw7UpHPwNbdmNw9AkgGA+ptQxcjPug==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    #problem {
+      font-size: 30px;
+      text-align: center;
+      margin: 50px auto;
+    }
 
-        #answer {
-            display: none;
-            font-size: 50px;
-            text-align: center;
-            margin-top: 20px;
-        }
-        #totalCount {
-            margin-top: 1em;
-            text-align: center;
-        }
-        .center {
-            text-align: center;
-        }
-    </style>
+    #answer {
+      display: none;
+      font-size: 50px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    #totalCount {
+      margin-top: 1em;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <div class="center" style="margin-top: 3em;">
-      <button onclick="showProblem()">つぎのもんだい</button>
+  <div data-theme="dark">
+    <div id="totalCount" class="mt-6"></div>
+    <div class="mt-3 has-text-centered">
+      <button class="button is-large" onclick="showProblem()">つぎのもんだい</button>
     </div>
-    <div id="totalCount"></div>
-    <div class="center" style="margin-top: 1em;">
-      <button onclick="showAnswer()">こたえ</button>
+    <div class="mt-5 has-text-centered">
+      <button class="button is-danger" onclick="showAnswer()">こたえ</button>
     </div>
     <div id="answer"></div>
 
@@ -41,5 +40,6 @@
     </div>
 
     <script src="script.js"></script>
+  </div>
 </body>
 </html>
