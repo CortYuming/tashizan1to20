@@ -51,3 +51,8 @@ function showTotalCount(count) {
 function showAnswer() {
   answer.style.display = 'block';
 }
+
+function resetCount() {
+  count = 0;
+  showTotalCount(count);
+}
