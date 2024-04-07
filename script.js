@@ -49,7 +49,17 @@ setExpression();
 
 function setExpression() {
   const params = new URLSearchParams(location.search);
-  const sign = params.get('sign');
+  const sign = params.get('sign') || 'plus';
+
+  // set active tab
+  ['plus', 'minus'].forEach(s => {
+    const e = document.getElementById(s);
+    e.classList.remove('is-active');
+    if (sign === s) {
+      e.classList.add('is-active');
+    }
+  })
+
   generateExpression(sign);
 }
 
