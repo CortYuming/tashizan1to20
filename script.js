@@ -25,7 +25,13 @@ function generateExpression(sign='plus') {
   const circles2 = formatString('●'.repeat(num2));
 
   expression.textContent = `${circles1}\n ${signs[sign]} \n${circles2}`;
-  answer.textContent = `${num1} ${signs[sign]} ${num2} = ${num1 + num2}`;
+
+  let answerNum = num1 + num2
+    if (sign === 'minus') {
+    answerNum = num1 - num2
+  }
+
+  answer.textContent = `${num1} ${signs[sign]} ${num2} = ${answerNum}`;
 }
 
 function addPadding(str, num) {
