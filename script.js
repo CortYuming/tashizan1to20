@@ -71,7 +71,7 @@ function setExpression() {
 }
 
 /* eslint-disable no-unused-vars */
-function showExpression() {
+function nextExpression() {
   setExpression();
   answer.style.display = 'none';
 
