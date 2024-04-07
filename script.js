@@ -90,6 +90,7 @@ function showAnswer() {
 function resetCount() {
   count = 0;
   showTotalCount(count);
+  answer.style.display = 'none';
   setExpression();
 }
 
