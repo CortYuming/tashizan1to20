@@ -7,8 +7,9 @@ showTotalCount(count);
 
 function generateExpression(sign='plus') {
   const signs = {plus: "＋", minus: "−"}
+
   if (!Object.keys(signs)?.includes(sign)) {
-    sign='plus'
+    sign = getRandomKey(signs)
   }
   const maxNum = 20;
   const minNum = 1
@@ -52,7 +53,7 @@ function setExpression() {
   const sign = params.get('sign') || 'plus';
 
   // set active tab
-  ['plus', 'minus'].forEach(s => {
+  ['plus', 'minus', 'mix'].forEach(s => {
     const e = document.getElementById(s);
     e.classList.remove('is-active');
     if (sign === s) {
@@ -88,5 +89,11 @@ function resetCount() {
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getRandomKey(obj) {
+  const keys = Object.keys(obj);
+  const randomIndex = Math.floor(Math.random() * keys.length);
+  return keys[randomIndex];
 }
 
