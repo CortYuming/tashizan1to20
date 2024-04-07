@@ -77,6 +77,7 @@ function showExpression() {
 
   count += 1
   showTotalCount(count);
+  scrolltop()
 }
 
 function showTotalCount(count) {
@@ -92,6 +93,11 @@ function resetCount() {
   showTotalCount(count);
   answer.style.display = 'none';
   setExpression();
+  scrolltop();
+}
+
+function scrolltop() {
+  window.scroll({top: 0});
 }
 
 function getRandomInt(min, max) {
