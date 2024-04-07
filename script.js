@@ -88,7 +88,7 @@ function showAnswer() {
 }
 
 function resetCount() {
-  count = 0;
+  count = 1;
   showTotalCount(count);
   answer.style.display = 'none';
   setExpression();
