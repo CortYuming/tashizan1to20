@@ -24,7 +24,7 @@ function generateExpression(sign='plus') {
   const circles1 = formatString('●'.repeat(num1));
   const circles2 = formatString('●'.repeat(num2));
 
-  expression.textContent = `${circles1}\n ${signs[sign]} \n${circles2}`;
+  expression.innerHTML = `${circles1}\n ${signs[sign]} \n${circles2}`;
 
   let answerNum = num1 + num2
     if (sign === 'minus') {
@@ -45,6 +45,17 @@ function formatString(str) {
   for (let i = 0; i < str.length; i += 5) {
     lines.push(addPadding(str.slice(i, i + 5), 5));
   }
+
+  let count = 0
+  let className = ''
+  lines.forEach((line, i) => {
+    if (count >= 2) {
+      className = className ? '' : 'opacity'
+      count = 0
+    }
+    count += 1
+    lines[i] = `<span class="${className}">${line}</span>`
+  })
 
   result = lines.join('\n');
   return result;
