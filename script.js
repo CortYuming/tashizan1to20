@@ -18,7 +18,7 @@ function generateExpression(sign='plus') {
   let num2 = getRandomInt(minNum, maxNum)
 
   if (sign === 'minus') {
-    num2 = getRandomInt(minNum - 1, num1)
+    num2 = getRandomInt(minNum, num1)
   }
 
   const circles1 = formatString('●'.repeat(num1));
