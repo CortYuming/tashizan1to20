@@ -121,3 +121,24 @@ function getRandomKey(obj) {
   return keys[randomIndex];
 }
 
+
+function main() {
+  document.addEventListener('keydown', function (event) {
+    if (event.code === 'Enter') {
+      event.preventDefault();
+
+      const answer = document.getElementById('answer');
+      const answerBtn = document.getElementById('answerBtn');
+      const nextBtn = document.getElementById('nextBtn');
+
+      console.info(answer.style.display);
+      if (answer.style.display !== 'block') {
+        showAnswer();
+      } else {
+        nextExpression();
+      }
+    }
+  });
+}
+
+main();
