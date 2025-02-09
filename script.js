@@ -3,8 +3,6 @@ const answer = document.getElementById('answer');
 const totalCount = document.getElementById('totalCount')
 let count = 1
 
-showTotalCount(count);
-
 function generateExpression(sign='plus') {
   const signs = {plus: "＋", minus: "−"}
 
@@ -60,9 +58,6 @@ function formatString(str) {
   result = lines.join('\n');
   return result;
 }
-
-
-setExpression();
 
 
 function setExpression() {
@@ -123,6 +118,9 @@ function getRandomKey(obj) {
 
 
 function main() {
+  showTotalCount(count);
+  setExpression();
+
   document.addEventListener('keydown', function (event) {
     if (event.code === 'Enter') {
       event.preventDefault();
