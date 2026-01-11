@@ -21,6 +21,8 @@ class DotCalculator {
       expression: document.getElementById('expression'),
       answer: document.getElementById('answer'),
       totalCount: document.getElementById('totalCount'),
+      answerBtn: document.getElementById('answerBtn'),
+      nextBtn: document.getElementById('nextBtn'),
     };
     this.count = 1;
     this.currentSign = this.getSignFromUrl();
@@ -33,6 +35,7 @@ class DotCalculator {
     this.setActiveTab();
     this.generateExpression();
     this.setupKeyboardHandler();
+    this.showAnswerBtn();
   }
 
   getSignFromUrl() {
@@ -112,6 +115,7 @@ class DotCalculator {
 
   showAnswer() {
     this.elements.answer.style.display = 'block';
+    this.showNextBtn();
   }
 
   hideAnswer() {
@@ -122,19 +126,34 @@ class DotCalculator {
     return this.elements.answer.style.display === 'block';
   }
 
+  showAnswerBtn() {
+    this.elements.answerBtn.style.display = 'inline-block';
+    this.elements.nextBtn.style.display = 'none';
+  }
+
+  showNextBtn() {
+    this.elements.answerBtn.style.display = 'none';
+    this.elements.nextBtn.style.display = 'inline-block';
+  }
+
   nextExpression() {
     this.count += 1;
     this.updateTotalCount();
     this.generateExpression();
     this.hideAnswer();
+    this.showAnswerBtn();
     this.scrollToTop();
   }
 
   resetCount() {
+    if (!confirm('さいしょからやりなおしますか？')) {
+      return;
+    }
     this.count = 1;
     this.updateTotalCount();
     this.generateExpression();
     this.hideAnswer();
+    this.showAnswerBtn();
     this.scrollToTop();
   }
 
