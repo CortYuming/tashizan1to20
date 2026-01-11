@@ -21,6 +21,8 @@ class DotCalculator {
       expression: document.getElementById('expression'),
       answer: document.getElementById('answer'),
       totalCount: document.getElementById('totalCount'),
+      answerBtn: document.getElementById('answerBtn'),
+      nextBtn: document.getElementById('nextBtn'),
     };
     this.count = 1;
     this.currentSign = this.getSignFromUrl();
@@ -33,6 +35,7 @@ class DotCalculator {
     this.setActiveTab();
     this.generateExpression();
     this.setupKeyboardHandler();
+    this.showAnswerBtn();
   }
 
   getSignFromUrl() {
@@ -82,7 +85,10 @@ class DotCalculator {
     const { SIGNS } = DotCalculator.CONFIG;
     const dots1 = this.formatDots(num1);
     const dots2 = this.formatDots(num2);
-    this.elements.expression.innerHTML = `${dots1}\n ${SIGNS[sign]} \n${dots2}`;
+    const separator = '<span class="separator"></span>';
+    const signHtml = `<span class="sign">${SIGNS[sign]}</span>`;
+    this.elements.expression.innerHTML =
+      `${dots1}\n${separator}${signHtml}\n${separator}${dots2}`;
   }
 
   renderAnswer(num1, num2, result, sign) {
@@ -102,16 +108,16 @@ class DotCalculator {
 
     return lines
       .map((line, index) => {
-        const groupIndex = Math.floor(index / LINES_PER_GROUP);
-        const isEvenGroup = groupIndex % 2 === 0;
-        const className = isEvenGroup ? '' : 'opacity';
-        return `<span class="${className}">${line}</span>`;
+        const needsSeparator = index > 0 && index % LINES_PER_GROUP === 0;
+        const separator = needsSeparator ? '<span class="separator"></span>' : '';
+        return `${separator}<span>${line}</span>`;
       })
       .join('\n');
   }
 
   showAnswer() {
     this.elements.answer.style.display = 'block';
+    this.showNextBtn();
   }
 
   hideAnswer() {
@@ -122,19 +128,34 @@ class DotCalculator {
     return this.elements.answer.style.display === 'block';
   }
 
+  showAnswerBtn() {
+    this.elements.answerBtn.style.display = 'inline-block';
+    this.elements.nextBtn.style.display = 'none';
+  }
+
+  showNextBtn() {
+    this.elements.answerBtn.style.display = 'none';
+    this.elements.nextBtn.style.display = 'inline-block';
+  }
+
   nextExpression() {
     this.count += 1;
     this.updateTotalCount();
     this.generateExpression();
     this.hideAnswer();
+    this.showAnswerBtn();
     this.scrollToTop();
   }
 
   resetCount() {
+    if (!confirm('さいしょからやりなおしますか？')) {
+      return;
+    }
     this.count = 1;
     this.updateTotalCount();
     this.generateExpression();
     this.hideAnswer();
+    this.showAnswerBtn();
     this.scrollToTop();
   }
 
