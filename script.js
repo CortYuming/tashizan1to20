@@ -8,11 +8,11 @@ class DotCalculator {
     MAX_NUM: 20,
     DOTS_PER_LINE: 5,
     LINES_PER_GROUP: 2,
-    FILLED_DOT: '●',
-    EMPTY_DOT: '◯',
+    FILLED_DOT: '●',  // U+25CF (Geometric Shapes)
+    EMPTY_DOT: '○',   // U+25CB (Geometric Shapes)
     SIGNS: {
-      plus: '＋',
-      minus: '−',
+      plus: '+',      // ASCII
+      minus: '−',     // U+2212 (Mathematical Operators)
     },
   };
 
