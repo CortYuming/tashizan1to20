@@ -85,7 +85,10 @@ class DotCalculator {
     const { SIGNS } = DotCalculator.CONFIG;
     const dots1 = this.formatDots(num1);
     const dots2 = this.formatDots(num2);
-    this.elements.expression.innerHTML = `${dots1}\n ${SIGNS[sign]} \n${dots2}`;
+    const separator = '<span class="separator"></span>';
+    const signHtml = `<span class="sign">${SIGNS[sign]}</span>`;
+    this.elements.expression.innerHTML =
+      `${dots1}\n${separator}${signHtml}\n${separator}${dots2}`;
   }
 
   renderAnswer(num1, num2, result, sign) {
@@ -105,10 +108,9 @@ class DotCalculator {
 
     return lines
       .map((line, index) => {
-        const groupIndex = Math.floor(index / LINES_PER_GROUP);
-        const isEvenGroup = groupIndex % 2 === 0;
-        const className = isEvenGroup ? '' : 'opacity';
-        return `<span class="${className}">${line}</span>`;
+        const needsSeparator = index > 0 && index % LINES_PER_GROUP === 0;
+        const separator = needsSeparator ? '<span class="separator"></span>' : '';
+        return `${separator}<span>${line}</span>`;
       })
       .join('\n');
   }
