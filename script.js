@@ -1,142 +1,188 @@
-const expression = document.getElementById('expression');
-const answer = document.getElementById('answer');
-const totalCount = document.getElementById('totalCount')
-let count = 1
+/**
+ * ドット計算アプリ - 1〜20の足し算・引き算練習
+ */
 
-function generateExpression(sign='plus') {
-  const signs = {plus: "＋", minus: "−"}
+class DotCalculator {
+  static CONFIG = {
+    MIN_NUM: 1,
+    MAX_NUM: 20,
+    DOTS_PER_LINE: 5,
+    LINES_PER_GROUP: 2,
+    FILLED_DOT: '●',  // U+25CF (Geometric Shapes)
+    EMPTY_DOT: '○',   // U+25CB (Geometric Shapes)
+    SIGNS: {
+      plus: '+',      // ASCII
+      minus: '−',     // U+2212 (Mathematical Operators)
+    },
+  };
 
-  if (!Object.keys(signs)?.includes(sign)) {
-    sign = getRandomKey(signs)
-  }
-  const maxNum = 20;
-  const minNum = 1
-  // default='plus'
-  const num1 = getRandomInt(minNum, maxNum)
-  let num2 = getRandomInt(minNum, maxNum)
+  constructor() {
+    this.elements = {
+      expression: document.getElementById('expression'),
+      answer: document.getElementById('answer'),
+      totalCount: document.getElementById('totalCount'),
+    };
+    this.count = 1;
+    this.currentSign = this.getSignFromUrl();
 
-  if (sign === 'minus') {
-    num2 = getRandomInt(minNum, num1)
-  }
-
-  const circles1 = formatString('●'.repeat(num1));
-  const circles2 = formatString('●'.repeat(num2));
-
-  expression.innerHTML = `${circles1}\n ${signs[sign]} \n${circles2}`;
-
-  let answerNum = num1 + num2
-    if (sign === 'minus') {
-    answerNum = num1 - num2
-  }
-
-  answer.textContent = `${num1} ${signs[sign]} ${num2} = ${answerNum}`;
-}
-
-function addPadding(str, num) {
-  return str.padEnd(num, '◯');
-}
-
-function formatString(str) {
-  let result = '';
-  let lines = [];
-
-  for (let i = 0; i < str.length; i += 5) {
-    lines.push(addPadding(str.slice(i, i + 5), 5));
+    this.init();
   }
 
-  let count = 0
-  let className = ''
-  lines.forEach((line, i) => {
-    if (count >= 2) {
-      className = className ? '' : 'opacity'
-      count = 0
+  init() {
+    this.updateTotalCount();
+    this.setActiveTab();
+    this.generateExpression();
+    this.setupKeyboardHandler();
+  }
+
+  getSignFromUrl() {
+    const params = new URLSearchParams(location.search);
+    return params.get('sign') || 'plus';
+  }
+
+  setActiveTab() {
+    const validSigns = ['plus', 'minus', 'mix'];
+    validSigns.forEach((sign) => {
+      const element = document.getElementById(sign);
+      element.classList.toggle('is-active', sign === this.currentSign);
+    });
+  }
+
+  generateExpression() {
+    const sign = this.resolveSign();
+    const { num1, num2 } = this.generateNumbers(sign);
+    const result = this.calculate(num1, num2, sign);
+
+    this.renderExpression(num1, num2, sign);
+    this.renderAnswer(num1, num2, result, sign);
+  }
+
+  resolveSign() {
+    const { SIGNS } = DotCalculator.CONFIG;
+    if (this.currentSign === 'mix') {
+      return this.getRandomKey(SIGNS);
     }
-    count += 1
-    lines[i] = `<span class="${className}">${line}</span>`
-  })
+    return Object.keys(SIGNS).includes(this.currentSign) ? this.currentSign : 'plus';
+  }
 
-  result = lines.join('\n');
-  return result;
-}
+  generateNumbers(sign) {
+    const { MIN_NUM, MAX_NUM } = DotCalculator.CONFIG;
+    const num1 = this.getRandomInt(MIN_NUM, MAX_NUM);
+    const num2 = sign === 'minus'
+      ? this.getRandomInt(MIN_NUM, num1)
+      : this.getRandomInt(MIN_NUM, MAX_NUM);
+    return { num1, num2 };
+  }
 
+  calculate(num1, num2, sign) {
+    return sign === 'minus' ? num1 - num2 : num1 + num2;
+  }
 
-function setExpression() {
-  const params = new URLSearchParams(location.search);
-  const sign = params.get('sign') || 'plus';
+  renderExpression(num1, num2, sign) {
+    const { SIGNS } = DotCalculator.CONFIG;
+    const dots1 = this.formatDots(num1);
+    const dots2 = this.formatDots(num2);
+    this.elements.expression.innerHTML = `${dots1}\n ${SIGNS[sign]} \n${dots2}`;
+  }
 
-  // set active tab
-  ['plus', 'minus', 'mix'].forEach(s => {
-    const e = document.getElementById(s);
-    e.classList.remove('is-active');
-    if (sign === s) {
-      e.classList.add('is-active');
+  renderAnswer(num1, num2, result, sign) {
+    const { SIGNS } = DotCalculator.CONFIG;
+    this.elements.answer.textContent = `${num1} ${SIGNS[sign]} ${num2} = ${result}`;
+  }
+
+  formatDots(count) {
+    const { DOTS_PER_LINE, LINES_PER_GROUP, FILLED_DOT, EMPTY_DOT } = DotCalculator.CONFIG;
+    const dots = FILLED_DOT.repeat(count);
+    const lines = [];
+
+    for (let i = 0; i < dots.length; i += DOTS_PER_LINE) {
+      const line = dots.slice(i, i + DOTS_PER_LINE).padEnd(DOTS_PER_LINE, EMPTY_DOT);
+      lines.push(line);
     }
-  })
 
-  generateExpression(sign);
+    return lines
+      .map((line, index) => {
+        const groupIndex = Math.floor(index / LINES_PER_GROUP);
+        const isEvenGroup = groupIndex % 2 === 0;
+        const className = isEvenGroup ? '' : 'opacity';
+        return `<span class="${className}">${line}</span>`;
+      })
+      .join('\n');
+  }
+
+  showAnswer() {
+    this.elements.answer.style.display = 'block';
+  }
+
+  hideAnswer() {
+    this.elements.answer.style.display = 'none';
+  }
+
+  isAnswerVisible() {
+    return this.elements.answer.style.display === 'block';
+  }
+
+  nextExpression() {
+    this.count += 1;
+    this.updateTotalCount();
+    this.generateExpression();
+    this.hideAnswer();
+    this.scrollToTop();
+  }
+
+  resetCount() {
+    this.count = 1;
+    this.updateTotalCount();
+    this.generateExpression();
+    this.hideAnswer();
+    this.scrollToTop();
+  }
+
+  updateTotalCount() {
+    this.elements.totalCount.textContent = `${this.count} もんめ`;
+  }
+
+  scrollToTop() {
+    window.scroll({ top: 0 });
+  }
+
+  setupKeyboardHandler() {
+    document.addEventListener('keydown', (event) => {
+      if (event.code === 'Enter') {
+        event.preventDefault();
+        if (this.isAnswerVisible()) {
+          this.nextExpression();
+        } else {
+          this.showAnswer();
+        }
+      }
+    });
+  }
+
+  getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  getRandomKey(obj) {
+    const keys = Object.keys(obj);
+    return keys[Math.floor(Math.random() * keys.length)];
+  }
 }
 
-/* eslint-disable no-unused-vars */
-function nextExpression() {
-  setExpression();
-  answer.style.display = 'none';
-
-  count += 1
-  showTotalCount(count);
-  scrolltop()
-}
-
-function showTotalCount(count) {
-  totalCount.innerHTML = count + ' もんめ';
-}
+// グローバル関数（HTML の onclick 属性から呼び出される）
+let app;
 
 function showAnswer() {
-  answer.style.display = 'block';
+  app.showAnswer();
+}
+
+function nextExpression() {
+  app.nextExpression();
 }
 
 function resetCount() {
-  count = 1;
-  showTotalCount(count);
-  answer.style.display = 'none';
-  setExpression();
-  scrolltop();
+  app.resetCount();
 }
 
-function scrolltop() {
-  window.scroll({top: 0});
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function getRandomKey(obj) {
-  const keys = Object.keys(obj);
-  const randomIndex = Math.floor(Math.random() * keys.length);
-  return keys[randomIndex];
-}
-
-
-function main() {
-  showTotalCount(count);
-  setExpression();
-
-  document.addEventListener('keydown', function (event) {
-    if (event.code === 'Enter') {
-      event.preventDefault();
-
-      const answer = document.getElementById('answer');
-      const answerBtn = document.getElementById('answerBtn');
-      const nextBtn = document.getElementById('nextBtn');
-
-      console.info(answer.style.display);
-      if (answer.style.display !== 'block') {
-        showAnswer();
-      } else {
-        nextExpression();
-      }
-    }
-  });
-}
-
-main();
+// アプリケーション起動
+app = new DotCalculator();
